@@ -1,0 +1,176 @@
+{
+  "routesChecked": 90,
+  "changedRoutes": [
+    {
+      "route": "/ar",
+      "repairs": [
+        {
+          "id": "2b",
+          "previousBytes": 1870,
+          "bytes": 1882
+        },
+        {
+          "id": "2c",
+          "previousBytes": 2039,
+          "bytes": 2055
+        }
+      ]
+    },
+    {
+      "route": "/ar/services",
+      "repairs": [
+        {
+          "id": "2a",
+          "previousBytes": 3914,
+          "bytes": 4138
+        }
+      ]
+    },
+    {
+      "route": "/ar/31",
+      "repairs": [
+        {
+          "id": "22",
+          "previousBytes": 1891,
+          "bytes": 2073
+        },
+        {
+          "id": "31",
+          "previousBytes": 1870,
+          "bytes": 1882
+        },
+        {
+          "id": "32",
+          "previousBytes": 2039,
+          "bytes": 2055
+        }
+      ]
+    },
+    {
+      "route": "/ar/35",
+      "repairs": [
+        {
+          "id": "22",
+          "previousBytes": 2677,
+          "bytes": 2863
+        },
+        {
+          "id": "29",
+          "previousBytes": 1870,
+          "bytes": 1882
+        },
+        {
+          "id": "30",
+          "previousBytes": 2039,
+          "bytes": 2055
+        }
+      ]
+    },
+    {
+      "route": "/ar/27",
+      "repairs": [
+        {
+          "id": "22",
+          "previousBytes": 2852,
+          "bytes": 3042
+        },
+        {
+          "id": "29",
+          "previousBytes": 2039,
+          "bytes": 2055
+        },
+        {
+          "id": "30",
+          "previousBytes": 1870,
+          "bytes": 1882
+        }
+      ]
+    },
+    {
+      "route": "/en",
+      "repairs": [
+        {
+          "id": "2b",
+          "previousBytes": 1306,
+          "bytes": 1315
+        },
+        {
+          "id": "2c",
+          "previousBytes": 1647,
+          "bytes": 1655
+        }
+      ]
+    },
+    {
+      "route": "/en/services",
+      "repairs": [
+        {
+          "id": "29",
+          "previousBytes": 3914,
+          "bytes": 4138
+        }
+      ]
+    },
+    {
+      "route": "/en/31",
+      "repairs": [
+        {
+          "id": "21",
+          "previousBytes": 1611,
+          "bytes": 1788
+        },
+        {
+          "id": "2d",
+          "previousBytes": 1306,
+          "bytes": 1315
+        },
+        {
+          "id": "2e",
+          "previousBytes": 1647,
+          "bytes": 1655
+        }
+      ]
+    },
+    {
+      "route": "/en/35",
+      "repairs": [
+        {
+          "id": "21",
+          "previousBytes": 2095,
+          "bytes": 2277
+        },
+        {
+          "id": "28",
+          "previousBytes": 1306,
+          "bytes": 1315
+        },
+        {
+          "id": "2f",
+          "previousBytes": 1647,
+          "bytes": 1655
+        }
+      ]
+    },
+    {
+      "route": "/en/27",
+      "repairs": [
+        {
+          "id": "21",
+          "previousBytes": 2493,
+          "bytes": 2674
+        },
+        {
+          "id": "28",
+          "previousBytes": 1647,
+          "bytes": 1655
+        },
+        {
+          "id": "2f",
+          "previousBytes": 1306,
+          "bytes": 1315
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

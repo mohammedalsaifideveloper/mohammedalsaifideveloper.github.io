@@ -1,0 +1,13 @@
+{
+  "name": "saifi-wallet-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/server.mjs",
+    "start": "node scripts/server.mjs",
+    "server": "node scripts/server.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node scripts/verify.mjs && node scripts/verify-brand.mjs && node scripts/verify-loading.mjs && node scripts/verify-flight.mjs"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "routesChecked": 90,
+  "locales": [
+    "ar",
+    "en"
+  ],
+  "apiChecks": [
+    "page content",
+    "bilingual search",
+    "service parents",
+    "more FAQs",
+    "submission failure"
+  ],
+  "browserQA": "Not performed: required control-browser capability unavailable in this managed environment.",
+  "screenshotComparison": "Not performed; no pixel-perfect claim.",
+  "loadingChecks": {
+    "passed": true,
+    "routes": [
+      "/ar/",
+      "/en/",
+      "/ar/services/",
+      "/en/services/"
+    ],
+    "maximumIntroMilliseconds": 600,
+    "unavailableStorage": true,
+    "missingAnimation": true,
+    "callbackUpdates": true,
+    "unmountCleanup": true,
+    "compiledContentPipeline": true
+  },
+  "transportChecks": {
+    "passed": true,
+    "canonicalRoutes": 90,
+    "publishedRoutes": 90,
+    "textRows": 120,
+    "shippedReactDecoder": true,
+    "affectedPages": [
+      "/ar",
+      "/en",
+      "/ar/services",
+      "/en/services"
+    ],
+    "previousReleaseFailureReproduced": true,
+    "fragmentedUtf8": true,
+    "bilingualRegressionFixtures": true
+  }
+}

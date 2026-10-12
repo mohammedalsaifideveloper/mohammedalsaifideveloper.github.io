@@ -1,0 +1,16 @@
+{
+  "brand": "SAIFI",
+  "primary": "#22366B",
+  "routes": 90,
+  "recoveredOriginalAssets": 191,
+  "suppliedBrandFiles": 8,
+  "publicApiResponses": 47,
+  "build": "passed",
+  "transportValidation": {
+    "routes": 90,
+    "textRows": 120,
+    "utf8ByteLengths": "passed"
+  },
+  "visualComparison": "not performed — browser capability unavailable",
+  "pendingApprovedAppMedia": true
+}

@@ -1,0 +1,374 @@
+[
+  {
+    "endpoint": "Pages/GetPages",
+    "body": {},
+    "file": "Pages_GetPages_all.json"
+  },
+  {
+    "endpoint": "Pages/GetSocialMedia",
+    "body": {
+      "publishType": 1
+    },
+    "file": "Pages_GetSocialMedia_all.json"
+  },
+  {
+    "endpoint": "Pages/GetPageSections",
+    "body": {
+      "ID": 1,
+      "publishType": 1
+    },
+    "file": "Pages_GetPageSections_1.json"
+  },
+  {
+    "endpoint": "Pages/GetPageSections",
+    "body": {
+      "ID": 2,
+      "publishType": 1
+    },
+    "file": "Pages_GetPageSections_2.json"
+  },
+  {
+    "endpoint": "Pages/GetPageSections",
+    "body": {
+      "ID": 3,
+      "publishType": 1
+    },
+    "file": "Pages_GetPageSections_3.json"
+  },
+  {
+    "endpoint": "Pages/GetPageSections",
+    "body": {
+      "ID": 4,
+      "publishType": 1
+    },
+    "file": "Pages_GetPageSections_4.json"
+  },
+  {
+    "endpoint": "Pages/GetPageSections",
+    "body": {
+      "ID": 5,
+      "publishType": 1
+    },
+    "file": "Pages_GetPageSections_5.json"
+  },
+  {
+    "endpoint": "Pages/GetMainServiceDetails",
+    "body": {
+      "ID": 1,
+      "publishType": 1
+    },
+    "file": "Pages_GetMainServiceDetails_1.json"
+  },
+  {
+    "endpoint": "Pages/GetMainServiceDetails",
+    "body": {
+      "ID": 69,
+      "publishType": 1
+    },
+    "file": "Pages_GetMainServiceDetails_69.json"
+  },
+  {
+    "endpoint": "Pages/GetMainServiceDetails",
+    "body": {
+      "ID": 2,
+      "publishType": 1
+    },
+    "file": "Pages_GetMainServiceDetails_2.json"
+  },
+  {
+    "endpoint": "Pages/GetMainServiceDetails",
+    "body": {
+      "ID": 3,
+      "publishType": 1
+    },
+    "file": "Pages_GetMainServiceDetails_3.json"
+  },
+  {
+    "endpoint": "Pages/GetMainServiceDetails",
+    "body": {
+      "ID": 4,
+      "publishType": 1
+    },
+    "file": "Pages_GetMainServiceDetails_4.json"
+  },
+  {
+    "endpoint": "Pages/GetMainServiceDetails",
+    "body": {
+      "ID": 35,
+      "publishType": 1
+    },
+    "file": "Pages_GetMainServiceDetails_35.json"
+  },
+  {
+    "endpoint": "Pages/GetMainServiceDetails",
+    "body": {
+      "ID": 6,
+      "publishType": 1
+    },
+    "file": "Pages_GetMainServiceDetails_6.json"
+  },
+  {
+    "endpoint": "Pages/GetMainServiceDetails",
+    "body": {
+      "ID": 7,
+      "publishType": 1
+    },
+    "file": "Pages_GetMainServiceDetails_7.json"
+  },
+  {
+    "endpoint": "Pages/GetMainServiceDetails",
+    "body": {
+      "ID": 8,
+      "publishType": 1
+    },
+    "file": "Pages_GetMainServiceDetails_8.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 9,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_9.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 11,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_11.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 10,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_10.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 12,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_12.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 43,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_43.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 67,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_67.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 71,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_71.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 13,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_13.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 14,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_14.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 15,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_15.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 48,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_48.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 49,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_49.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 54,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_54.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 55,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_55.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 18,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_18.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 57,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_57.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 59,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_59.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 60,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_60.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 61,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_61.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 62,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_62.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 68,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_68.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 63,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_63.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 64,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_64.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 65,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_65.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 66,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_66.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 72,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_72.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 73,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_73.json"
+  },
+  {
+    "endpoint": "Pages/GetSubServiceData",
+    "body": {
+      "ID": 74,
+      "publishType": 1
+    },
+    "file": "Pages_GetSubServiceData_74.json"
+  },
+  {
+    "endpoint": "Pages/GetBlogWithRelated",
+    "body": {
+      "ID": 31,
+      "publishType": 1
+    },
+    "file": "Pages_GetBlogWithRelated_31.json"
+  },
+  {
+    "endpoint": "Pages/GetBlogWithRelated",
+    "body": {
+      "ID": 35,
+      "publishType": 1
+    },
+    "file": "Pages_GetBlogWithRelated_35.json"
+  },
+  {
+    "endpoint": "Pages/GetBlogWithRelated",
+    "body": {
+      "ID": 27,
+      "publishType": 1
+    },
+    "file": "Pages_GetBlogWithRelated_27.json"
+  }
+]

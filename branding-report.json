@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "routesChecked": 90,
+  "sourceTextFilesChecked": 337,
+  "externalAuditTerms": 0,
+  "origin": "https://mohammedalsaifideveloper.github.io",
+  "primary": "#22366B",
+  "approvedLogosPreserved": true,
+  "contentApi": "Local snapshot",
+  "pageDocumentStructurePreserved": true,
+  "pendingOfficialLinks": [
+    "Android app",
+    "social accounts"
+  ],
+  "appMediaReplacementPending": true,
+  "browserVerification": "Not performed: required browser capability unavailable."
+}
