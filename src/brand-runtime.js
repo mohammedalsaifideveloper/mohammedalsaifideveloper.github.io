@@ -44,40 +44,41 @@
   refreshDownloadCard();
   new MutationObserver(refreshDownloadCard).observe(document.documentElement, {childList: true, subtree: true, characterData: true});
 
-  // Convert the nine homepage service cards from a carousel to the compact
-  // three-column menu shown in the supplied reference, with consistent icons.
-  const serviceIcons = [
-    [/تحويلات مالية|Money Transfers/i, 'transfers'],
-    [/شبكة تحويل|Tehweel Network/i, 'network'],
-    [/الشحن والسداد|Recharge and Bill Payment/i, 'recharge'],
-    [/شراء أونلاين|Online Shopping/i, 'online-shopping'],
-    [/دفع مشتريات|Purchase Payments/i, 'purchases'],
-    [/سحب نقدي|Cash Withdrawal/i, 'cash-withdrawal'],
-    [/المدفوعات|Payments/i, 'payments'],
-    [/خدمات الترفيه|Entertainment Services/i, 'entertainment'],
-    [/صيفي|SAIFI/i, 'saifi']
+  // Preserve the original Swiper behavior and card styling. Only replace each
+  // service mark and the Arabic labels that differ from the reference.
+  const serviceCards = [
+    {icon: 'transfers'},
+    {icon: 'network', arabicName: 'الصيفي كاش'},
+    {icon: 'recharge'},
+    {icon: 'online-shopping'},
+    {icon: 'purchases', arabicName: 'دفع المشتريات'},
+    {icon: 'cash-withdrawal'},
+    {icon: 'payments'},
+    {icon: 'entertainment', arabicName: 'خدمات ترفيه'},
+    {icon: 'saifi'}
   ];
-  function refreshServiceGrid() {
+  function refreshServiceCardContent() {
     const section = document.querySelector('[aria-label="Services section"]');
-    const wrapper = section?.querySelector('.swiper-wrapper');
-    if (!section || !wrapper) return;
-    wrapper.classList.add('saifi-services-grid');
-    wrapper.querySelectorAll('.swiper-slide').forEach((slide, index) => {
-      slide.classList.add('saifi-service-tile');
-      const card = slide.querySelector('.group > div');
-      card?.classList.add('saifi-service-card');
-      const icon = slide.querySelector('img');
-      const label = slide.querySelector('h3')?.textContent?.trim() || '';
-      const iconName = serviceIcons.find(([pattern]) => pattern.test(label))?.[1] || serviceIcons[index % serviceIcons.length][1];
-      if (icon) {
-        icon.src = `/assets/brand/service-icons/${iconName}.svg`;
-        icon.removeAttribute('srcset');
-        icon.alt = slide.querySelector('h3')?.textContent?.trim() || 'SAIFI';
-        icon.classList.add('saifi-service-icon');
+    const slides = section?.querySelectorAll('.swiper-slide');
+    if (!slides?.length) return;
+    slides.forEach((slide, fallbackIndex) => {
+      const dataIndex = slide.getAttribute('data-swiper-slide-index');
+      const slideIndex = dataIndex === null ? Number.NaN : Number(dataIndex);
+      const item = serviceCards[Number.isInteger(slideIndex) && slideIndex >= 0 ? slideIndex : fallbackIndex % serviceCards.length];
+      if (!item) return;
+      const heading = slide.querySelector('h3');
+      if (item.arabicName && location.pathname.startsWith('/ar') && heading && heading.textContent !== item.arabicName) {
+        heading.textContent = item.arabicName;
       }
-      slide.querySelector('h3')?.classList.add('saifi-service-label');
+      const icon = slide.querySelector('img');
+      if (icon && icon.dataset.saifiServiceIcon !== item.icon) {
+        icon.src = `/assets/brand/service-icons/${item.icon}.svg`;
+        icon.removeAttribute('srcset');
+        icon.alt = heading?.textContent?.trim() || 'SAIFI';
+        icon.dataset.saifiServiceIcon = item.icon;
+      }
     });
   }
-  refreshServiceGrid();
-  new MutationObserver(refreshServiceGrid).observe(document.documentElement, {childList: true, subtree: true});
+  refreshServiceCardContent();
+  new MutationObserver(refreshServiceCardContent).observe(document.documentElement, {childList: true, subtree: true});
 })();
