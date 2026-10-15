@@ -93,6 +93,33 @@
       if (heading && item.arabicName && location.pathname.startsWith('/ar')) heading.textContent = item.arabicName;
     }
   }
+  function refreshServicesPageCards() {
+    if (!/^\/(?:ar|en)\/services\/?$/.test(location.pathname)) return;
+    for (const card of document.querySelectorAll('.cursor-pointer')) {
+      const text = normalizeServiceText(card.innerText || card.textContent);
+      const record = snapshot.mainServices.find(service => {
+        const title = normalizeServiceText(service.title);
+        const englishTitle = normalizeServiceText(service.enTitle);
+        return (title && text.includes(title)) || (englishTitle && text.includes(englishTitle));
+      });
+      const item = record && serviceCards.find(candidate => candidate.id === Number(record.id));
+      if (!item) continue;
+
+      const heading = [...card.querySelectorAll('span, h1, h2, h3, h4, p')].find(element => {
+        const value = normalizeServiceText(element.textContent);
+        return value === normalizeServiceText(record.title) || value === normalizeServiceText(record.enTitle);
+      });
+      if (heading && location.pathname.startsWith('/ar')) heading.textContent = serviceName(item);
+
+      const icon = card.querySelector('img');
+      if (icon && icon.dataset.saifiServiceIcon !== item.icon) {
+        icon.src = `/assets/brand/service-icons/${item.icon}.svg`;
+        icon.removeAttribute('srcset');
+        icon.alt = location.pathname.startsWith('/ar') ? serviceName(item) : record.enTitle;
+        icon.dataset.saifiServiceIcon = item.icon;
+      }
+    }
+  }
   function refreshServiceCards() {
     const section = document.querySelector('[aria-label="Services section"]');
     const wrapper = section?.querySelector('.swiper-wrapper');
@@ -119,6 +146,7 @@
       icon?.classList.add('saifi-service-icon');
     });
     refreshLinkedServiceCards();
+    refreshServicesPageCards();
   }
   refreshServiceCards();
   new MutationObserver(refreshServiceCards).observe(document.documentElement, {childList: true, subtree: true});
