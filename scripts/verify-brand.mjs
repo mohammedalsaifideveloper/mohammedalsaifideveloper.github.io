@@ -15,7 +15,7 @@ for(const route of snapshot.routes){
  const html=fs.readFileSync(path.join(dist,route.slice(1),'index.html'),'utf8');
  assert(html.includes('/_rebuild/brand.css'));
  assert(html.includes('/_rebuild/brand-runtime.js'));
- assert(html.includes('content="#22366B"'));
+ assert(html.includes('content="#1E3E89"'));
  assert(html.includes('/assets/brand/saifi-symbol.svg'));
  for(const tag of html.matchAll(/<meta\b[^>]*(?:property="og:image"|name="twitter:image")[^>]*>/g))assert(tag[0].includes(brand.socialImage),route+': social preview');
  const canonical=fs.readFileSync(path.join(root,'vendor/routes',route.slice(1),'index.html'),'utf8');
