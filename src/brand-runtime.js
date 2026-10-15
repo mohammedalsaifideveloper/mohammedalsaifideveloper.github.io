@@ -1,5 +1,15 @@
 /* Keep head metadata on SAIFI when the retained client refreshes SEO tags. */
 (() => {
+  // This file has its own IIFE; variables declared in runtime.js are not
+  // available here. Keep the page snapshot and locale local to this script.
+  const snapshot = window.__SAIFI_SNAPSHOT__ || {mainServices: [], routes: []};
+  const locale = () => location.pathname.split('/')[1] === 'en' ? 'en' : 'ar';
+
+  // The server sends the loading overlay as HTML. React normally removes it
+  // after 600 ms; avoid trapping visitors on a black screen if hydration
+  // fails or is delayed on the static deployment.
+  setTimeout(() => document.getElementById('saifi-loading-screen')?.remove(), 3000);
+
   const socialImage = location.origin + '/assets/brand/saifi-social.png';
   function refresh() {
     for (const meta of document.head.querySelectorAll('meta[property="og:image"], meta[name="twitter:image"]')) {
@@ -126,11 +136,18 @@
       const icon = card.querySelector('img');
       // The Tehweel Network card has its own existing mark and no matching
       // standalone icon in the corrected wallet set. Preserve that mark.
-      if (icon && Number(record.id) !== 69 && icon.dataset.saifiServiceIcon !== item.icon) {
-        icon.src = `/assets/brand/service-icons/${item.icon}.svg`;
-        icon.removeAttribute('srcset');
-        icon.alt = heading?.textContent?.trim() || record.enTitle;
-        icon.dataset.saifiServiceIcon = item.icon;
+      if (icon && Number(record.id) !== 69) {
+        const expectedIcon = `/assets/brand/service-icons/${item.icon}.svg`;
+        // React may reuse the same <img> after hydration/error-state updates,
+        // restoring its original mainIconUrl while leaving our data marker in
+        // place. Compare the rendered source as well as the marker so the
+        // corrected wallet icon wins after every client re-render.
+        if (icon.dataset.saifiServiceIcon !== item.icon || icon.getAttribute('src') !== expectedIcon || icon.hasAttribute('srcset')) {
+          icon.src = expectedIcon;
+          icon.removeAttribute('srcset');
+          icon.alt = heading?.textContent?.trim() || record.enTitle;
+          icon.dataset.saifiServiceIcon = item.icon;
+        }
       }
     }
   }
