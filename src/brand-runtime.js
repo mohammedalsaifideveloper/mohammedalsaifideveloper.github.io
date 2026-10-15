@@ -8,7 +8,7 @@
     for (const [key, value] of [['og:image:width', '1200'], ['og:image:height', '630']]) {
       for (const meta of document.head.querySelectorAll('meta[property="' + key + '"]')) if (meta.content !== value) meta.content = value;
     }
-    for (const meta of document.head.querySelectorAll('meta[name="theme-color"]')) if (meta.content !== '#22366B') meta.content = '#22366B';
+    for (const meta of document.head.querySelectorAll('meta[name="theme-color"]')) if (meta.content !== '#1E3E89') meta.content = '#1E3E89';
     for (const meta of document.head.querySelectorAll('meta[name="twitter:site"], meta[name="twitter:creator"]')) meta.remove();
   }
   refresh();
@@ -44,32 +44,37 @@
   refreshDownloadCard();
   new MutationObserver(refreshDownloadCard).observe(document.documentElement, {childList: true, subtree: true, characterData: true});
 
-  // Preserve the original Swiper behavior and card styling. Only replace each
-  // service mark and the Arabic labels that differ from the reference.
+  // Keep the original Swiper motion and links; replace only the service icons
+  // and the Arabic labels that differ from the reference.
   const serviceCards = [
-    {icon: 'transfers'},
-    {icon: 'network', arabicName: 'الصيفي كاش'},
-    {icon: 'recharge'},
-    {icon: 'online-shopping'},
-    {icon: 'purchases', arabicName: 'دفع المشتريات'},
-    {icon: 'cash-withdrawal'},
-    {icon: 'payments'},
-    {icon: 'entertainment', arabicName: 'خدمات ترفيه'},
+    {icon: 'trasfer_light'},
+    {icon: 'saifi_cash', arabicName: 'الصيفي كاش'},
+    {icon: 'recharg'},
+    {icon: 'pay_puch'},
+    {icon: 'trasfer_p2p', arabicName: 'دفع المشتريات'},
+    {icon: 'whindraw'},
+    {icon: 'payment'},
+    {icon: 'geme', arabicName: 'خدمات ترفيه'},
     {icon: 'saifi'}
   ];
-  function refreshServiceCardContent() {
+  function refreshServiceCards() {
     const section = document.querySelector('[aria-label="Services section"]');
-    const slides = section?.querySelectorAll('.swiper-slide');
-    if (!slides?.length) return;
+    const wrapper = section?.querySelector('.swiper-wrapper');
+    if (!wrapper) return;
+    const slides = wrapper.querySelectorAll('.swiper-slide');
     slides.forEach((slide, fallbackIndex) => {
       const dataIndex = slide.getAttribute('data-swiper-slide-index');
       const slideIndex = dataIndex === null ? Number.NaN : Number(dataIndex);
-      const item = serviceCards[Number.isInteger(slideIndex) && slideIndex >= 0 ? slideIndex : fallbackIndex % serviceCards.length];
+      const index = Number.isInteger(slideIndex) && slideIndex >= 0 ? slideIndex : fallbackIndex % serviceCards.length;
+      const item = serviceCards[index];
       if (!item) return;
+      const card = slide.querySelector('.group > div');
+      card?.classList.add('saifi-service-card');
       const heading = slide.querySelector('h3');
       if (item.arabicName && location.pathname.startsWith('/ar') && heading && heading.textContent !== item.arabicName) {
         heading.textContent = item.arabicName;
       }
+      heading?.classList.add('saifi-service-label');
       const icon = slide.querySelector('img');
       if (icon && icon.dataset.saifiServiceIcon !== item.icon) {
         icon.src = `/assets/brand/service-icons/${item.icon}.svg`;
@@ -77,8 +82,9 @@
         icon.alt = heading?.textContent?.trim() || 'SAIFI';
         icon.dataset.saifiServiceIcon = item.icon;
       }
+      icon?.classList.add('saifi-service-icon');
     });
   }
-  refreshServiceCardContent();
-  new MutationObserver(refreshServiceCardContent).observe(document.documentElement, {childList: true, subtree: true});
+  refreshServiceCards();
+  new MutationObserver(refreshServiceCards).observe(document.documentElement, {childList: true, subtree: true});
 })();

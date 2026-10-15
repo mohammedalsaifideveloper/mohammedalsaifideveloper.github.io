@@ -1,11 +1,11 @@
 /* SAIFI identity tokens. Original layout, fonts and breakpoints are retained. */
 :root {
-  --brand-primary: #22366B;
-  --brand-primary-rgb: 34, 54, 107;
-  --brand-hover: #1A2A53;
+  --brand-primary: #1E3E89;
+  --brand-primary-rgb: 30, 62, 137;
+  --brand-hover: #193572;
   --brand-dark: #172448;
   --brand-accent: #314984;
-  --brand-tint: #EEF1F8;
+  --brand-tint: #EDF1FC;
   --color-primary: var(--brand-primary);
   --brand-logo-fit: contain;
 }
@@ -41,4 +41,57 @@ img[src*="Answers and solutions"], video[src*="help%20and%20support"],
 video[src*="help and support"], video:has(source[src*="help%20and%20support"]),
 video:has(source[src*="help and support"]) {
   filter: url("/assets/brand/saifi-color-filter.svg#brand-navy");
+}
+
+/* Keep the original moving service carousel with the corrected Alsaifi cards. */
+[aria-label="Services section"] .relative.w-full.py-12 {
+  padding: 8px !important;
+  border-radius: 20px !important;
+  background: #edf1fc !important;
+}
+[aria-label="Services section"] .saifi-service-card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: clamp(3px, 1vw, 10px) !important;
+  min-height: clamp(60px, 19.5vw, 176px) !important;
+  padding: clamp(5px, 1.5vw, 14px) 4px !important;
+  border: 0 !important;
+  border-radius: clamp(12px, 2.2vw, 22px) !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  color: #14162a !important;
+  transition: transform 160ms ease, box-shadow 160ms ease !important;
+}
+[aria-label="Services section"] .saifi-service-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(30, 62, 137, 0.12) !important;
+}
+[aria-label="Services section"] .saifi-service-card .mb-6 {
+  margin: 0 !important;
+  line-height: 0 !important;
+}
+[aria-label="Services section"] .saifi-service-icon {
+  display: block !important;
+  width: clamp(26px, 9vw, 82px) !important;
+  height: clamp(26px, 9vw, 82px) !important;
+  object-fit: contain !important;
+  filter: none !important;
+}
+[aria-label="Services section"] .saifi-service-card > div:last-child {
+  gap: 0 !important;
+}
+[aria-label="Services section"] .saifi-service-label {
+  margin: 0 !important;
+  color: #14162a !important;
+  font-size: clamp(10px, 2.2vw, 21px) !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  -webkit-text-fill-color: #14162a !important;
+  background: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
 }
