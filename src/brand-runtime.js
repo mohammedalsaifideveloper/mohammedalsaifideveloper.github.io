@@ -1,5 +1,15 @@
 /* Keep head metadata on SAIFI when the retained client refreshes SEO tags. */
 (() => {
+  // This file has its own IIFE; variables declared in runtime.js are not
+  // available here. Keep the page snapshot and locale local to this script.
+  const snapshot = window.__SAIFI_SNAPSHOT__ || {mainServices: [], routes: []};
+  const locale = () => location.pathname.split('/')[1] === 'en' ? 'en' : 'ar';
+
+  // The server sends the loading overlay as HTML. React normally removes it
+  // after 600 ms; avoid trapping visitors on a black screen if hydration
+  // fails or is delayed on the static deployment.
+  setTimeout(() => document.getElementById('saifi-loading-screen')?.remove(), 3000);
+
   const socialImage = location.origin + '/assets/brand/saifi-social.png';
   function refresh() {
     for (const meta of document.head.querySelectorAll('meta[property="og:image"], meta[name="twitter:image"]')) {
