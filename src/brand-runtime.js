@@ -133,9 +133,15 @@
     const destination = `/${locale()}/services/${item.id}`;
     if (!snapshot.routes.includes(destination)) return;
     const link = control.closest('a[href]');
-    if (link && new URL(link.href, location.origin).pathname.replace(/\/$/, '') === destination) return;
+    if (link) {
+      const current = new URL(link.href, location.origin);
+      if (current.pathname === `${destination}/` && current.searchParams.get('source') === 'services') return;
+    }
     event.preventDefault();
     event.stopImmediatePropagation();
-    location.assign(destination);
+    // Match the Services page card behavior and use GitHub Pages' directory
+    // URL so the static index.html is resolved rather than a path 404.
+    sessionStorage.setItem('navigationSource', 'services');
+    location.assign(`${destination}/?source=services`);
   }, true);
 })();
