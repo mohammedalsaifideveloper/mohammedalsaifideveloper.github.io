@@ -93,29 +93,43 @@
       if (heading && item.arabicName && location.pathname.startsWith('/ar')) heading.textContent = item.arabicName;
     }
   }
+  function serviceRecordForText(value) {
+    const text = normalizeServiceText(value);
+    return snapshot.mainServices.find(record => {
+      const item = serviceCards.find(candidate => candidate.id === Number(record.id));
+      return [record.title, record.enTitle, item?.arabicName].some(name => {
+        const normalized = normalizeServiceText(name);
+        return normalized && text.includes(normalized);
+      });
+    });
+  }
   function refreshServicesPageCards() {
     if (!/^\/(?:ar|en)\/services\/?$/.test(location.pathname)) return;
     for (const card of document.querySelectorAll('.cursor-pointer')) {
-      const text = normalizeServiceText(card.innerText || card.textContent);
-      const record = snapshot.mainServices.find(service => {
-        const title = normalizeServiceText(service.title);
-        const englishTitle = normalizeServiceText(service.enTitle);
-        return (title && text.includes(title)) || (englishTitle && text.includes(englishTitle));
-      });
+      const record = serviceRecordForText(card.innerText || card.textContent);
       const item = record && serviceCards.find(candidate => candidate.id === Number(record.id));
       if (!item) continue;
 
       const heading = [...card.querySelectorAll('span, h1, h2, h3, h4, p')].find(element => {
         const value = normalizeServiceText(element.textContent);
-        return value === normalizeServiceText(record.title) || value === normalizeServiceText(record.enTitle);
+        return [record.title, record.enTitle, item.arabicName].some(name => value && value === normalizeServiceText(name));
       });
-      if (heading && location.pathname.startsWith('/ar')) heading.textContent = serviceName(item);
+      if (heading) {
+        // ID 69 is an existing, separately named Tehweel Network service.
+        // Keep its identity and route; the home carousel's Saifi Cash label
+        // does not create a separate Saifi Cash detail service.
+        heading.textContent = Number(record.id) === 69
+          ? (location.pathname.startsWith('/ar') ? record.title : record.enTitle)
+          : (location.pathname.startsWith('/ar') ? serviceName(item) : record.enTitle);
+      }
 
       const icon = card.querySelector('img');
-      if (icon && icon.dataset.saifiServiceIcon !== item.icon) {
+      // The Tehweel Network card has its own existing mark and no matching
+      // standalone icon in the corrected wallet set. Preserve that mark.
+      if (icon && Number(record.id) !== 69 && icon.dataset.saifiServiceIcon !== item.icon) {
         icon.src = `/assets/brand/service-icons/${item.icon}.svg`;
         icon.removeAttribute('srcset');
-        icon.alt = location.pathname.startsWith('/ar') ? serviceName(item) : record.enTitle;
+        icon.alt = heading?.textContent?.trim() || record.enTitle;
         icon.dataset.saifiServiceIcon = item.icon;
       }
     }
@@ -149,7 +163,12 @@
     refreshServicesPageCards();
   }
   refreshServiceCards();
-  new MutationObserver(refreshServiceCards).observe(document.documentElement, {childList: true, subtree: true});
+  new MutationObserver(refreshServiceCards).observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['src', 'srcset']
+  });
 
   // Open service tiles on their detail page even when the original control
   // was rendered as a non-navigating button/card.
