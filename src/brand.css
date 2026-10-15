@@ -16,22 +16,15 @@
 .saifi-company-lockup { display: flex; align-items: center; gap: 10px; max-width: 190px; padding-bottom: 28px; }
 .saifi-company-lockup span { font-size: 13px; line-height: 1.5; color: #d2d5df; }
 @media (min-width: 768px) { .saifi-company-lockup { padding-bottom: 0; } }
-/* The download-app card places the navy wallet lockup over a dark video.
-   Scale it as a complete mark and lift its contrast so it stays legible. */
-[aria-label="Download app section"] img[src*="saifi-wallet-navy.svg"] {
-  width: clamp(17rem, 42vw, 35rem) !important;
-  max-width: 80% !important;
-  height: auto !important;
-  max-height: 65vh !important;
+/* Keep the download card's existing badge layout, using the SAIFI app mark. */
+[aria-label="Download app section"] .saifi-download-brand-logo {
+  width: 72px !important;
+  height: 72px !important;
+  max-width: 72px !important;
+  max-height: 72px !important;
   object-fit: contain !important;
   object-position: center !important;
-  filter: brightness(0) invert(1);
-}
-@media (max-width: 640px) {
-  [aria-label="Download app section"] img[src*="saifi-wallet-navy.svg"] {
-    width: min(82vw, 22rem) !important;
-    max-height: 42vh !important;
-  }
+  filter: none !important;
 }
 /* Change only red/gray brand illustrations. Screenshots and third-party marks
    remain untouched until approved SAIFI app media is supplied. */

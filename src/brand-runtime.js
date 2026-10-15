@@ -13,4 +13,34 @@
   }
   refresh();
   new MutationObserver(refresh).observe(document.head, {childList: true, subtree: true, attributes: true, attributeFilter: ['content']});
+
+  // Rebrand the download card after its client-rendered content is mounted.
+  // The retained page data can still contain the previous app name or mark.
+  const downloadLogo = '/assets/brand/saifi-icon-512.png';
+  function refreshDownloadCard() {
+    const section = document.querySelector('[aria-label="Download app section"]');
+    if (!section) return;
+
+    const walker = document.createTreeWalker(section, NodeFilter.SHOW_TEXT);
+    let textNode;
+    while ((textNode = walker.nextNode())) {
+      if (textNode.nodeValue.includes('جيب')) textNode.nodeValue = textNode.nodeValue.replaceAll('جيب', 'صيفي');
+    }
+
+    const currentMark = section.querySelector('img, svg');
+    if (!currentMark) return;
+    let image = currentMark;
+    if (currentMark.tagName.toLowerCase() === 'svg') {
+      image = document.createElement('img');
+      image.className = currentMark.getAttribute('class') || '';
+      currentMark.replaceWith(image);
+    }
+    if (!image.src.endsWith(downloadLogo)) image.src = downloadLogo;
+    image.removeAttribute('srcset');
+    image.alt = 'شعار صيفي';
+    image.classList.add('saifi-download-brand-logo');
+  }
+
+  refreshDownloadCard();
+  new MutationObserver(refreshDownloadCard).observe(document.documentElement, {childList: true, subtree: true, characterData: true});
 })();
