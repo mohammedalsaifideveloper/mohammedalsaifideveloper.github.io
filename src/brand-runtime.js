@@ -126,11 +126,18 @@
       const icon = card.querySelector('img');
       // The Tehweel Network card has its own existing mark and no matching
       // standalone icon in the corrected wallet set. Preserve that mark.
-      if (icon && Number(record.id) !== 69 && icon.dataset.saifiServiceIcon !== item.icon) {
-        icon.src = `/assets/brand/service-icons/${item.icon}.svg`;
-        icon.removeAttribute('srcset');
-        icon.alt = heading?.textContent?.trim() || record.enTitle;
-        icon.dataset.saifiServiceIcon = item.icon;
+      if (icon && Number(record.id) !== 69) {
+        const expectedIcon = `/assets/brand/service-icons/${item.icon}.svg`;
+        // React may reuse the same <img> after hydration/error-state updates,
+        // restoring its original mainIconUrl while leaving our data marker in
+        // place. Compare the rendered source as well as the marker so the
+        // corrected wallet icon wins after every client re-render.
+        if (icon.dataset.saifiServiceIcon !== item.icon || icon.getAttribute('src') !== expectedIcon || icon.hasAttribute('srcset')) {
+          icon.src = expectedIcon;
+          icon.removeAttribute('srcset');
+          icon.alt = heading?.textContent?.trim() || record.enTitle;
+          icon.dataset.saifiServiceIcon = item.icon;
+        }
       }
     }
   }
