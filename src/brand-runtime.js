@@ -63,20 +63,29 @@
   };
   const normalizeServiceText = value => String(value || '').toLocaleLowerCase().normalize('NFKC')
     .replace(/[\u064B-\u065F\u0670]/g, '').replace(/\s+/g, ' ').trim();
-  function serviceForElement(element) {
-    const slide = element.closest?.('.swiper-slide');
-    const rawIndex = slide?.getAttribute('data-swiper-slide-index');
-    if (rawIndex !== null && rawIndex !== undefined && Number.isInteger(Number(rawIndex))) {
-      return serviceCards[Number(rawIndex)];
-    }
-    const text = normalizeServiceText(element.getAttribute?.('aria-label') || element.innerText || element.textContent);
-    return serviceCards.find(item => {
-      const record = snapshot.mainServices.find(service => Number(service.id) === item.id);
-      return [serviceName(item), record?.title, record?.enTitle].some(name => {
+  function serviceRecordForText(value) {
+    const text = normalizeServiceText(value);
+    return snapshot.mainServices.find(record => {
+      const item = serviceCards.find(candidate => candidate.id === Number(record.id));
+      return [record.title, record.enTitle, item?.arabicName].some(name => {
         const normalized = normalizeServiceText(name);
-        return normalized && text.includes(normalized);
+        return normalized && (text === normalized || text.includes(normalized));
       });
     });
+  }
+  function serviceForElement(element) {
+    const slide = element.closest?.('.swiper-slide');
+    const identity = slide || element;
+    const title = identity.querySelector?.('h1, h2, h3, h4, [data-service-title]');
+    const image = identity.querySelector?.('img');
+    const record = serviceRecordForText([
+      title?.textContent,
+      image?.alt,
+      identity.getAttribute?.('aria-label'),
+      identity.innerText,
+      identity.textContent
+    ].filter(Boolean).join(' '));
+    return record && serviceCards.find(item => item.id === Number(record.id));
   }
   function refreshLinkedServiceCards() {
     for (const element of document.querySelectorAll('a[href], button, [role="button"]')) {
@@ -96,12 +105,7 @@
   function refreshServicesPageCards() {
     if (!/^\/(?:ar|en)\/services\/?$/.test(location.pathname)) return;
     for (const card of document.querySelectorAll('.cursor-pointer')) {
-      const text = normalizeServiceText(card.innerText || card.textContent);
-      const record = snapshot.mainServices.find(service => {
-        const title = normalizeServiceText(service.title);
-        const englishTitle = normalizeServiceText(service.enTitle);
-        return (title && text.includes(title)) || (englishTitle && text.includes(englishTitle));
-      });
+      const record = serviceRecordForText(card.innerText || card.textContent);
       const item = record && serviceCards.find(candidate => candidate.id === Number(record.id));
       if (!item) continue;
 
@@ -123,17 +127,16 @@
   function refreshServiceCards() {
     const section = document.querySelector('[aria-label="Services section"]');
     const wrapper = section?.querySelector('.swiper-wrapper');
-    if (wrapper) wrapper.querySelectorAll('.swiper-slide').forEach((slide, fallbackIndex) => {
-      const dataIndex = slide.getAttribute('data-swiper-slide-index');
-      const slideIndex = dataIndex === null ? Number.NaN : Number(dataIndex);
-      const index = Number.isInteger(slideIndex) && slideIndex >= 0 ? slideIndex : fallbackIndex % serviceCards.length;
-      const item = serviceCards[index];
+    if (wrapper) wrapper.querySelectorAll('.swiper-slide').forEach(slide => {
+      const item = serviceForElement(slide);
       if (!item) return;
       const card = slide.querySelector('.group > div');
       card?.classList.add('saifi-service-card');
       const heading = slide.querySelector('h3');
-      if (item.arabicName && location.pathname.startsWith('/ar') && heading && heading.textContent !== item.arabicName) {
-        heading.textContent = item.arabicName;
+      const record = snapshot.mainServices.find(service => Number(service.id) === item.id);
+      const label = location.pathname.startsWith('/ar') ? (item.arabicName || record?.title) : record?.enTitle;
+      if (label && heading && heading.textContent !== label) {
+        heading.textContent = label;
       }
       heading?.classList.add('saifi-service-label');
       const icon = slide.querySelector('img');
@@ -154,22 +157,24 @@
   // Open service tiles on their detail page even when the original control
   // was rendered as a non-navigating button/card.
   document.addEventListener('click', event => {
+    if (event.target.closest?.('.swiper-button-next, .swiper-button-prev, .swiper-pagination, .swiper-pagination-bullet, [data-swiper-control]')) return;
     const control = event.target.closest?.('a[href], button, [role="button"], .swiper-slide');
     if (!control) return;
-    const item = serviceForElement(control);
+    const slide = control.closest?.('.swiper-slide');
+    if (!slide) return;
+    const item = serviceForElement(slide);
     if (!item) return;
     const destination = `/${locale()}/services/${item.id}`;
     if (!snapshot.routes.includes(destination)) return;
+    const source = slide.closest('[aria-label="Services section"]') ? 'home' : 'services';
     const link = control.closest('a[href]');
     if (link) {
       const current = new URL(link.href, location.origin);
-      if (current.pathname === `${destination}/` && current.searchParams.get('source') === 'services') return;
+      if (current.pathname === `${destination}/` && current.searchParams.get('source') === source) return;
     }
     event.preventDefault();
     event.stopImmediatePropagation();
-    // Match the Services page card behavior and use GitHub Pages' directory
-    // URL so the static index.html is resolved rather than a path 404.
-    sessionStorage.setItem('navigationSource', 'services');
-    location.assign(`${destination}/?source=services`);
+    sessionStorage.setItem('navigationSource', source);
+    location.assign(`${destination}/?source=${source}`);
   }, true);
 })();

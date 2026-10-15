@@ -11,6 +11,21 @@ const scope={window:{}};
 vm.runInNewContext(fs.readFileSync(path.join(dist,'_rebuild/data.js'),'utf8'),scope);
 const snapshot=scope.window.__SAIFI_SNAPSHOT__;
 assert.equal(snapshot.routes.length,90);
+const serviceRuntime=fs.readFileSync(path.join(dist,'_rebuild/brand-runtime.js'),'utf8');
+const serviceTargets=[...serviceRuntime.matchAll(/\{id: (\d+), icon: '([^']+)'/g)].map(match=>({id:Number(match[1]),icon:match[2]}));
+assert.equal(serviceTargets.length,9,'all nine service slides have explicit service identities');
+assert.equal(new Set(serviceTargets.map(item=>item.id)).size,serviceTargets.length,'service identities are unique');
+assert(!serviceRuntime.includes('data-swiper-slide-index'),'service mapping does not depend on slide order');
+assert.deepEqual(serviceTargets.map(item=>item.id).sort((a,b)=>a-b),[...snapshot.mainServices].map(service=>Number(service.id)).sort((a,b)=>a-b),'every main service has exactly one slider target');
+for(const {id,icon} of serviceTargets){
+ assert(snapshot.mainServices.some(service=>Number(service.id)===id),`missing main service ${id}`);
+ for(const locale of ['ar','en']){
+  const route=`/${locale}/services/${id}`;
+  assert(snapshot.routes.includes(route),`missing service detail route ${route}`);
+  assert(fs.existsSync(path.join(dist,route.slice(1),'index.html')),`missing built service page ${route}`);
+ }
+ assert(fs.existsSync(path.join(dist,'assets/brand/service-icons',icon+'.svg')),`missing service icon ${icon}`);
+}
 for(const route of snapshot.routes){
  const html=fs.readFileSync(path.join(dist,route.slice(1),'index.html'),'utf8');
  assert(html.includes('/_rebuild/brand.css'));
