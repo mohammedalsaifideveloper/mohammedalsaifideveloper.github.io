@@ -1,12 +1,5 @@
 /* Keep head metadata on SAIFI when the retained client refreshes SEO tags. */
 (() => {
-  // This script runs in its own IIFE, separate from runtime.js. Read the
-  // published snapshot and locale locally instead of relying on variables
-  // scoped inside runtime.js (which caused a ReferenceError before the
-  // service-card replacement code could run).
-  const snapshot = window.__SAIFI_SNAPSHOT__ || {mainServices: [], routes: []};
-  const locale = () => location.pathname.split('/')[1] === 'en' ? 'en' : 'ar';
-
   const socialImage = location.origin + '/assets/brand/saifi-social.png';
   function refresh() {
     for (const meta of document.head.querySelectorAll('meta[property="og:image"], meta[name="twitter:image"]')) {
