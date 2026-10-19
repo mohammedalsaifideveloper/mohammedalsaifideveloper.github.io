@@ -95,3 +95,32 @@ video:has(source[src*="help and support"]) {
   background-clip: border-box !important;
   -webkit-background-clip: border-box !important;
 }
+
+/* Recolor only the service listing cards; the homepage carousel is untouched. */
+.saifi-services-page-card {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(17, 24, 39, 0.08) !important;
+}
+.saifi-services-page-card > .group {
+  background-color: #FFFFFF !important;
+}
+.saifi-services-page-card :not(svg):not(img) {
+  background-color: #FFFFFF !important;
+}
+.saifi-services-page-label {
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+}
+.saifi-services-page-arrow,
+.saifi-services-page-arrow path,
+.saifi-services-page-arrow line,
+.saifi-services-page-arrow polyline {
+  color: #1E3E89 !important;
+  stroke: #1E3E89 !important;
+}
+.saifi-services-page-card:hover .saifi-services-page-arrow-control,
+.saifi-services-page-card:focus-within .saifi-services-page-arrow-control {
+  background-color: #EDF1FC !important;
+}
+
+

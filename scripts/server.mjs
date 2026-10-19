@@ -60,7 +60,11 @@ const server = http.createServer((req, res) => {
     }
 
     const ext = path.extname(filePath).toLowerCase();
-    const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+    // These public .webm URLs contain MP4 data, so serve the matching media type.
+    const mp4VideoPaths = new Set(['/assets/videos/Hero.webm', '/assets/videos/mainVid.webm']);
+    const contentType = mp4VideoPaths.has(parsedPath)
+      ? 'video/mp4'
+      : MIME_TYPES[ext] || 'application/octet-stream';
 
     res.writeHead(200, {
       'Content-Type': contentType,

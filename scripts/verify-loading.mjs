@@ -16,7 +16,7 @@ const context = vm.createContext({
   setTimeout: (...args) => environment.setTimeout(...args),
   clearTimeout: id => environment.clearTimeout(id),
   fetch: (...args) => environment.fetch(...args),
-  window: {},
+  window: {location: {pathname: '/'}},
   document: {addEventListener() {}, removeEventListener() {}, querySelector: () => null},
   localStorage: {getItem: () => null, setItem() {throw new Error('Storage unavailable');}, removeItem() {}}
 });
@@ -123,16 +123,26 @@ function createHarness() {
 }
 
 for (const route of ['/ar/', '/en/', '/ar/services/', '/en/services/']) {
+  context.window.location.pathname = route;
   const html = fs.readFileSync(path.join(dist, route.slice(1), 'index.html'), 'utf8');
   // Every affected page must load the repaired shared screen, including refreshes.
   assert([...html.matchAll(/src="([^" ]+\.js)"/g)].some(match => {
     const file = path.join(dist, match[1]);
     return fs.existsSync(file) && fs.readFileSync(file, 'utf8').includes('saifi-loading-screen');
   }), route + ': repaired chunk is missing');
+  const servicesRoute = /^\/(?:ar|en)\/services\/?$/.test(route);
+  assert.equal(html.includes('id="saifi-services-no-loader"'), servicesRoute, route + ': loader visibility style mismatch');
   const harness = createHarness();
   let firstCallback = 0, latestCallback = 0;
   const content = {route};
   const firstFrame = harness.render({onLoadingComplete: () => firstCallback++, children: content});
+  if (servicesRoute) {
+    assert.equal(firstFrame.props.children, content, route + ': services must render immediately without loader');
+    assert.equal(firstCallback, 1, route + ': services completion callback must run immediately');
+    assert.equal(harness.advance(10000).props.children, content, route + ': services content must remain visible');
+    harness.unmount();
+    continue;
+  }
   assert.equal(firstFrame.props.className, 'fixed inset-0 z-9999 flex items-center justify-center bg-black');
   assert(JSON.stringify(firstFrame).includes('/assets/brand/saifi-wallet-white.svg'));
   harness.advance(400);
@@ -148,6 +158,7 @@ for (const route of ['/ar/', '/en/', '/ar/services/', '/en/services/']) {
 }
 const unmounted = createHarness();
 let lateCallback = 0;
+context.window.location.pathname = '/ar/';
 unmounted.render({onLoadingComplete: () => lateCallback++, children: null, isLanguageChange: true});
 unmounted.unmount();
 unmounted.advance(1000);
@@ -178,6 +189,6 @@ for (const locale of ['ar', 'en']) {
 }
 const reportPath = path.join(root, 'verification-report.json');
 const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
-report.loadingChecks = {passed: true, routes: ['/ar/', '/en/', '/ar/services/', '/en/services/'], maximumIntroMilliseconds: 600, unavailableStorage: true, missingAnimation: true, callbackUpdates: true, unmountCleanup: true, compiledContentPipeline: true};
+report.loadingChecks = {passed: true, routes: ['/ar/', '/en/', '/ar/services/', '/en/services/'], servicesLoader: 'hidden before first paint and removed immediately on mount', otherRoutesIntroMilliseconds: 600, unavailableStorage: true, missingAnimation: true, callbackUpdates: true, unmountCleanup: true, compiledContentPipeline: true};
 fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
-console.log('Passed: all four route dependencies, bounded loading with blocked storage and missing media, callback changes, unmount cleanup, and compiled page/API content. Browser rendering remains unverified.');
+console.log('Passed: services routes render without the loader; other routes retain their 600 ms intro; callback, unmount, blocked storage, missing media, and compiled content checks passed. Browser rendering remains unverified.');

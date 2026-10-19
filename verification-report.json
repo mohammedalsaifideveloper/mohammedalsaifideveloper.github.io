@@ -22,7 +22,8 @@
       "/ar/services/",
       "/en/services/"
     ],
-    "maximumIntroMilliseconds": 600,
+    "servicesLoader": "hidden before first paint and removed immediately on mount",
+    "otherRoutesIntroMilliseconds": 600,
     "unavailableStorage": true,
     "missingAnimation": true,
     "callbackUpdates": true,
@@ -41,8 +42,7 @@
       "/ar/services",
       "/en/services"
     ],
-    "previousReleaseFailureReproduced": true,
-    "fragmentedUtf8": true,
-    "bilingualRegressionFixtures": true
+    "suppliedServiceIconsInReactData": true,
+    "fragmentedUtf8": true
   }
 }
