@@ -6,7 +6,9 @@
   const locale = () => location.pathname.split('/')[1] === 'en' ? 'en' : 'ar';
   const isServicesPage = /^\/(?:ar|en)\/services\/?$/.test(location.pathname);
 
-  // Keep the static deployment usable if client hydration never removes its loader.
+  // The server sends the loading overlay as HTML. React normally removes it
+  // after 600 ms; avoid trapping visitors on a black screen if hydration
+  // fails or is delayed on the static deployment.
   setTimeout(() => document.getElementById('saifi-loading-screen')?.remove(), 3000);
 
   const socialImage = location.origin + '/assets/brand/saifi-social.png';
@@ -139,8 +141,8 @@
       if (heading) {
         heading.classList.add('saifi-services-page-label');
         heading.textContent = location.pathname.startsWith('/ar')
-          ? serviceName(item)
-          : (item.englishName || record.enTitle);
+          ? (Number(record.id) === 69 ? record.title : serviceName(item))
+          : (Number(record.id) === 69 ? record.enTitle : (item.englishName || record.enTitle));
       }
 
       const arrow = card.querySelector('svg');
