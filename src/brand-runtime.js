@@ -6,6 +6,9 @@
   const locale = () => location.pathname.split('/')[1] === 'en' ? 'en' : 'ar';
   const isServicesPage = /^\/(?:ar|en)\/services\/?$/.test(location.pathname);
 
+  // Keep the static deployment usable if client hydration never removes its loader.
+  setTimeout(() => document.getElementById('saifi-loading-screen')?.remove(), 3000);
+
   const socialImage = location.origin + '/assets/brand/saifi-social.png';
   function refresh() {
     for (const meta of document.head.querySelectorAll('meta[property="og:image"], meta[name="twitter:image"]')) {
@@ -95,7 +98,7 @@
       if (!item) continue;
       const icon = element.querySelector('img');
       if (icon && icon.dataset.saifiServiceIcon !== item.icon) {
-        icon.src = `/assets/brand/service-icons/${item.icon}.svg`;
+        icon.src = `/img/${item.icon}.svg`;
         icon.removeAttribute('srcset');
         icon.alt = serviceName(item) || 'SAIFI';
         icon.dataset.saifiServiceIcon = item.icon;
@@ -201,7 +204,7 @@
       heading?.classList.add('saifi-service-label');
       const icon = slide.querySelector('img');
       if (icon && icon.dataset.saifiServiceIcon !== item.icon) {
-        icon.src = `/assets/brand/service-icons/${item.icon}.svg`;
+        icon.src = `/img/${item.icon}.svg`;
         icon.removeAttribute('srcset');
         icon.alt = heading?.textContent?.trim() || 'SAIFI';
         icon.dataset.saifiServiceIcon = item.icon;
