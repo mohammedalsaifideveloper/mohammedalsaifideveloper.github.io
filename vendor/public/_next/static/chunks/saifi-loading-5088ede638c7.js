@@ -8,6 +8,11 @@ function LoadingScreen({onLoadingComplete,children}) {
   // The intro is decorative. Content must not wait for navigation, storage or media.
   React.useEffect(()=>{
     let cancelled=false;
+    if(typeof window!=="undefined"&&/^\/(?:ar|en)\/services\/?$/.test(window.location.pathname)){
+      setVisible(false);
+      complete.current?.();
+      return()=>{cancelled=true;};
+    }
     const timer=setTimeout(()=>{
       if(cancelled)return;
       setVisible(false);

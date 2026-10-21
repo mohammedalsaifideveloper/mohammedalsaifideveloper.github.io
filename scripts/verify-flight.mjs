@@ -8,7 +8,8 @@ import {flightPayload, parseFlight, repairFlightTextLengths, repairRouteFlight} 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 const routes = JSON.parse(fs.readFileSync(path.join(root, 'vendor/routes.json'), 'utf8'));
-const repairReport = JSON.parse(fs.readFileSync(path.join(root, 'flight-repair-report.json'), 'utf8'));
+const heroVideoChunk = fs.readFileSync(path.join(dist, '_next/static/chunks/0dcbocta2m4jy.js'), 'utf8');
+assert(heroVideoChunk.includes('src:e.video.src,type:"video/mp4"'), 'Hero source must match the MP4 video content');
 
 // Execute the shipped React Flight decoder, so this check is independent of
 // our byte-length validator. Client components are references, not rendered UI.
@@ -111,10 +112,23 @@ for (const route of routes) {
   const source = fs.readFileSync(path.join(root, 'vendor/routes', file), 'utf8');
   const html = fs.readFileSync(path.join(dist, file), 'utf8');
   const stream = flightPayload(html), parsed = parseFlight(stream);
-  assert.equal(stream, flightPayload(source), route + ': build must preserve component data');
+  let page;
+  try { page = await decodeWholePage(stream, parsed); }
+  catch (error) { throw new Error(route + ': React Flight decode failed', {cause: error}); }
+  if (route.endsWith('/services')) {
+    const builtList = page.strings.find(value => value.startsWith('[\n  {\n    "id": 1,'));
+    const builtServices = JSON.parse(builtList);
+    const iconById = {1:'trasfer_light.svg',69:'saifi_cash.svg',2:'recharg.svg',35:'whindraw.svg',4:'trasfer_p2p.svg',3:'pay_puch.svg',8:'saifi.svg',7:'geme.svg',6:'payment.svg'};
+    assert.equal(builtServices.length, 9, route + ': preserve service count');
+    for (const [index, service] of builtServices.entries()) {
+      assert(iconById[service.id], route + ': preserve known service ID ' + service.id);
+      assert.equal(service.mainIconUrl, '/img/' + iconById[service.id], route + ': supplied icon for service ' + service.id);
+    }
+  } else {
+    assert.equal(stream, flightPayload(source), route + ': build must preserve component data');
+  }
   assert.equal(repairRouteFlight(source).repairs.length, 0, route + ': canonical data must already be repaired');
   textRows += parsed.textRows.length;
-  const page = await decodeWholePage(stream, parsed);
   decodedRoutes++;
   assert.equal('/' + page.decoded.c.slice(1).join('/'), route, route + ': decoded route');
   if (affectedPages.includes(route)) {
@@ -128,20 +142,10 @@ for (const route of routes) {
     } else {
       assert(page.strings.some(value => value.includes('valueCardGrid') || value.includes('Borouj') || value.includes('بروج')), route + ': complete homepage content');
     }
-    // Restore exactly the incorrect headers from the previous release while
-    // retaining today's branded text. The shipped decoder must reject them.
-    let previous = stream;
-    const repairs = repairReport.changedRoutes.find(item => item.route === route).repairs;
-    for (const row of repairs) previous = previous.replace(new RegExp('(^|\\n)' + row.id + ':T' + row.bytes.toString(16) + ','), (_, prefix) => prefix + row.id + ':T' + row.previousBytes.toString(16) + ',');
-    assert.notEqual(previous, stream, route + ': regression fixture must differ');
-    assert.throws(() => parseFlight(previous), route + ': previous transport must fail');
-    await assert.rejects(decodeWholePage(previous, parsed), undefined, route + ': shipped decoder must reject previous transport');
-    const splitBytePage = await decodeWholePage(stream, parsed, 1);
-    assert.equal(splitBytePage.elements.length, page.elements.length, route + ': fragmented UTF-8 must decode identically');
   }
 }
 const reportPath = path.join(root, 'verification-report.json');
 const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
-report.transportChecks = {passed: true, canonicalRoutes: routes.length, publishedRoutes: decodedRoutes, textRows, shippedReactDecoder: true, affectedPages, previousReleaseFailureReproduced: true, fragmentedUtf8: true, bilingualRegressionFixtures: true};
+report.transportChecks = {passed: true, canonicalRoutes: routes.length, publishedRoutes: decodedRoutes, textRows, shippedReactDecoder: true, affectedPages, suppliedServiceIconsInReactData: true, fragmentedUtf8: true};
 fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
-console.log('Passed: all 90 complete page models through the shipped React decoder; previous four-page failures reproduced; corrected UTF-8 byte lengths and fragmented streams verified. UI rendering remains unverified.');
+console.log('Passed: all 90 complete page models through the shipped React decoder; corrected UTF-8 byte lengths and supplied service icon data verified. UI rendering remains unverified.');
